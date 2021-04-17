@@ -71,8 +71,16 @@ public class main {
                             break;
                         case 7:
                             manager.resetSlangs();
+                            break;
                         case 8:
                             manager.getRandomSlang();
+                            break;
+                        case 9:
+                            manager.genSlangQuestion();
+                            break;
+                        case 10:
+                            manager.genDefQuestionn();
+                            break;
                         default:
                             break;
 

@@ -1,27 +1,53 @@
 package io;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class io{
+public class io {
     public static void main(String[] args) {
-        HashMap<Integer, String> map = new HashMap<Integer, String>();
+//        Random rgen = new Random();  // Random number generator
+//        int[] cards = new int[4];
+//
+////--- Initialize the array to the ints 0-51
+//        for (int i=0; i<cards.length; i++) {
+//            cards[i] = i;
+//        }
+//
+////--- Shuffle by exchanging each element randomly
+//        for (int i=0; i<cards.length; i++) {
+//            int randomPosition = rgen.nextInt(cards.length);
+//            int temp = cards[i];
+//            cards[i] = cards[randomPosition];
+//            cards[randomPosition] = temp;
+//        }
+//        for (int i = 0; i < cards.length; i++) {
+//            System.out.println(cards[i]);
+//        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
 
-        map.put(1, "a");
-        map.put(2, "a a");
-        map.put(3, "fucku");
-        map.put(4, "fuckkkkk");
-        map.put(5, "aaaaaa");
-        map.put(8, "baaass");
-        map.put(10, "yo yoy o");
-        map.put(19, "im kp man");
-        map.put(13, "shitttt");
-        map.put(12, "ayooooooo");
+            System.out.println("nhap:");
+            String str = br.readLine();
+            while(!checkAnsInput(str)){
+                System.out.print("Nhập không hợp lệ! Vui lòng nhập lại (A/B/C/D): ");
+                str = br.readLine();
+            }
+            System.out.println(str.charAt(0));
 
-        map.clear();
+            System.out.println("xong");
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
+    }
 
-        System.out.println(map.toString());
-
+    private static boolean checkAnsInput(String str) {
+        if(str.length()>1)
+            return false;
+        int c = str.charAt(0);
+        if (c<65||c>68)
+            return false;
+        return true;
     }
 }

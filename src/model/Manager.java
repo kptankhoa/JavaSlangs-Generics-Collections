@@ -3,11 +3,13 @@ package model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Manager {
-    private Slang slangs;
-    private ArrayList<String> searchHistory;
+    private final Slang slangs;
+    private final ArrayList<String> searchHistory;
 
     public Manager() {
         super();
@@ -21,12 +23,19 @@ public class Manager {
         searchHistory = new ArrayList<>();
     }
 
+    private static boolean checkAnsInput(String str) {
+        if (str.length() > 1)
+            return false;
+        int c = str.charAt(0);
+        return c >= 65 && c <= 68;
+    }
+
     public void searchBySlang() {
         System.out.print("Nhập slang cầm tìm:");
         BufferedReader br = null;
         InputStreamReader isr = null;
         try {
-            isr = new InputStreamReader(System.in, "UTF-8");
+            isr = new InputStreamReader(System.in, StandardCharsets.UTF_8);
             br = new BufferedReader(isr);
             String str = br.readLine();
             String res = slangs.searchByKey(str);
@@ -54,7 +63,7 @@ public class Manager {
         BufferedReader br = null;
         InputStreamReader isr = null;
         try {
-            isr = new InputStreamReader(System.in, "UTF-8");
+            isr = new InputStreamReader(System.in, StandardCharsets.UTF_8);
             br = new BufferedReader(isr);
             String str = br.readLine();
             String res = slangs.searchByValue(str);
@@ -78,7 +87,7 @@ public class Manager {
         InputStreamReader isr = null;
         String slang, def;
         try {
-            isr = new InputStreamReader(System.in, "UTF-8");
+            isr = new InputStreamReader(System.in, StandardCharsets.UTF_8);
             br = new BufferedReader(isr);
             System.out.print("Nhập slang bạn muốn thêm: ");
             slang = br.readLine();
@@ -126,7 +135,7 @@ public class Manager {
         InputStreamReader isr = null;
         String slang;
         try {
-            isr = new InputStreamReader(System.in, "UTF-8");
+            isr = new InputStreamReader(System.in, StandardCharsets.UTF_8);
             br = new BufferedReader(isr);
             System.out.print("Nhập slang bạn muốn chỉnh sửa: ");
             slang = br.readLine();
@@ -153,7 +162,7 @@ public class Manager {
         InputStreamReader isr = null;
         String slang;
         try {
-            isr = new InputStreamReader(System.in, "UTF-8");
+            isr = new InputStreamReader(System.in, StandardCharsets.UTF_8);
             br = new BufferedReader(isr);
             System.out.print("Nhập slang bạn muốn xóa: ");
             slang = br.readLine();
@@ -182,15 +191,15 @@ public class Manager {
         BufferedReader br = null;
         InputStreamReader isr = null;
         try {
-            isr = new InputStreamReader(System.in, "UTF-8");
+            isr = new InputStreamReader(System.in, StandardCharsets.UTF_8);
             br = new BufferedReader(isr);
             System.out.println("Bạn có chắc chắn muốn reset danh sách slangs không? (1):Có / (0):Không");
             System.out.print("Nhập lựa chọn: ");
             int choice = Integer.parseInt(br.readLine());
-            if(choice == 1) {
+            if (choice == 1) {
                 slangs.reset("src/data/slang-backup.txt");
                 System.out.println("Reset thành công!");
-            } else if (choice == 0){
+            } else if (choice == 0) {
                 System.out.println("Đang hủy.....");
             }
         } catch (Exception e) {
@@ -198,15 +207,89 @@ public class Manager {
         }
     }
 
-    public void getRandomSlang(){
+    public void getRandomSlang() {
         String[] slang = slangs.getRandom();
         System.out.println("Slang word random: " + slang[0]);
         System.out.println("Definition: " + slang[1]);
     }
 
+    public void genSlangQuestion() {
+        ArrayList<String[]> questionData = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        for (int i = 0; i < 4; i++) {
+            questionData.add(slangs.getRandom());
+        }
+//        questionData.forEach((data) -> System.out.println(data[0] + " - " + data[1]));
+        int chosen = 0;
+        Random r = new Random();
+        int correctAns = r.nextInt(questionData.size());
+//        System.out.println(correctAns);
+        System.out.println("Chọn định nghĩa đúng cho \"" + questionData.get(correctAns)[0] + "\":");
+        for (int i = 0; i < questionData.size(); i++) {
+//            String[] ans = questionData.get(i);
+            System.out.print((char) (65 + i));
+            System.out.println(". " + questionData.get(i)[1]);
+        }
+        System.out.print("Nhập đáp án đúng (A/B/C/D): ");
+        try {
+            String str = br.readLine();
+            while (!checkAnsInput(str)) {
+                System.out.print("Nhập không hợp lệ! Vui lòng nhập lại (A/B/C/D): ");
+                str = br.readLine();
+            }
+            chosen = str.charAt(0);
+//            System.out.println(chosen);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if ((chosen - 65) == correctAns) {
+            System.out.println("Đáp án đúng!");
+        } else {
+            System.out.println("Đáp án sai! Đáp án đúng là " + (char)(correctAns+65) + ". " + questionData.get(correctAns)[1]);
+        }
+    }
 
-
-
-
+    public void genDefQuestionn(){
+        ArrayList<String[]> questionData = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        for (int i = 0; i < 4; i++) {
+            questionData.add(slangs.getRandom());
+        }
+//        questionData.forEach((data) -> System.out.println(data[0] + " - " + data[1]));
+        int chosen = 0;
+        Random r = new Random();
+        int correctAns = r.nextInt(questionData.size());
+//        System.out.println(correctAns);
+        System.out.println("Chọn slang đúng cho \"" + questionData.get(correctAns)[1] + "\":");
+        for (int i = 0; i < questionData.size(); i++) {
+//            String[] ans = questionData.get(i);
+            System.out.print((char) (65 + i));
+            System.out.println(". " + questionData.get(i)[0]);
+        }
+        System.out.print("Nhập đáp án đúng (A/B/C/D): ");
+        try {
+            String str = br.readLine();
+            while (!checkAnsInput(str)) {
+                System.out.print("Nhập không hợp lệ! Vui lòng nhập lại (A/B/C/D): ");
+                str = br.readLine();
+            }
+            chosen = str.charAt(0);
+//            System.out.println(chosen);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if ((chosen - 65) == correctAns) {
+            System.out.println("Đáp án đúng!");
+        } else {
+            System.out.println("Đáp án sai! Đáp án đúng là " + (char)(correctAns+65) + ". " + questionData.get(correctAns)[0]);
+        }
+    }
 
 }
+
+
+
+
+
+
+
