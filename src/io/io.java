@@ -18,7 +18,10 @@ public class io{
         map.put(13, "shitttt");
         map.put(12, "ayooooooo");
 
-        System.out.printf(map.toString());
-        System.out.println(map.values());
+        map.clear();
+
+
+        System.out.println(map.toString());
+
     }
 }

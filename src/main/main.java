@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 public class main {
     public static void main(String[] args) {
         int choice;
-        Slang slangs = new Slang("src/slang.txt");
+        Slang slangs = new Slang("src/data/slang.txt");
         Manager manager = new Manager(slangs);
         BufferedReader br = null;
         InputStreamReader isr = null;
@@ -32,7 +32,6 @@ public class main {
                 System.out.println("10. Đố vui (chọn slang word đúng cho definition)");
                 System.out.println("0: Thoát");
                 System.out.print("Nhập lựa chọn: ");
-//                String str = br.readLine();
                 while (true) {
                     try {
                         choice = Integer.parseInt(br.readLine());
@@ -46,6 +45,7 @@ public class main {
                 }
                 if(choice == 0){
                     System.out.println("Thoát chương trình.....");
+                    slangs.printOut("src/data/slang.txt");
                     break;
                 }
                 int next = -1;
@@ -63,18 +63,28 @@ public class main {
                         case 4:
                             manager.addSlang();
                             break;
+                        case 5:
+                            manager.editSlang();
+                            break;
+                        case 6:
+                            manager.deleteSlang();
+                            break;
+                        case 7:
+                            manager.resetSlangs();
+                        case 8:
+                            manager.getRandomSlang();
                         default:
                             break;
 
 
                     }
-                    System.out.println("Bạn có muốn tiếp tục(1) hay trờ về menu(0)?");
+                    System.out.print("Bạn có muốn tiếp tục(1) hay trờ về menu(0): ");
                     while(true) {
                         try {
                             next = Integer.parseInt(br.readLine());
                             if(next == 0 || next == 1)
                                 break;
-                            System.out.print("Giá trị nhập không hợp lệ! Vui lòng chọn lại:");
+                            System.out.print("Giá trị nhập không hợp lệ! Vui lòng chọn lại: ");
                         } catch (Exception e) {
                             System.out.print("Giá trị nhập không hợp lệ! Vui lòng chọn lại: ");
                         }
@@ -82,21 +92,7 @@ public class main {
 
 
                 } while (next == 1);
-//                int next = -1;
-//                do {
-//                    System.out.println("Bạn có muốn tiếp túc không? (1): tiếp tục, (0): quay về menu");
-//                    try{
-//                    next = Integer.parseInt(br.readLine());
-//                    } catch ( NumberFormatException e) {
-//                        System.out.println("Vui lòng nhập tùy chọn hợp lệ! (1): tiếp tục, (0): quay về menu: ");
-//                    }
-//                    if (next != 0 || next != 1){
-//                        System.out.println("Vui lòng nhập tùy chọn hợp lệ! (1): tiếp tục, (0): quay về menu: ");
-//                    }
-//                    if (next == 1){
-//                        break;
-//                    }
-//                } while (next!=0);
+
             } while (true);
         } catch (Exception e) {
             e.printStackTrace();

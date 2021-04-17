@@ -69,7 +69,7 @@ public class Manager {
     }
 
     public void showSearchHistory() {
-        System.out.println("Lịch sử tìm kiếm: ");
+        System.out.print("Lịch sử tìm kiếm: ");
         System.out.println(searchHistory.toString());
     }
 
@@ -83,9 +83,10 @@ public class Manager {
             System.out.print("Nhập slang bạn muốn thêm: ");
             slang = br.readLine();
             System.out.print("Nhập nghĩa của slang bạn muốn thêm: ");
-            def=br.readLine();
+            def = br.readLine();
             if (slangs.searchByKey(slang) != null) {
-                System.out.println("Slang đã tồn tại, bạn có muốn tiếp tục thêm không? (1): tiếp tục, (0): hủy");
+                System.out.println("Slang đã tồn tại, bạn có muốn tiếp tục thêm không? (1):tiếp tục, (0):hủy");
+                System.out.print("Nhập lựa chọn: ");
                 int choice = Integer.parseInt(br.readLine());
                 if (choice == 0) {
                     return;
@@ -95,8 +96,6 @@ public class Manager {
                     choice = Integer.parseInt(br.readLine());
                     if (choice == 1) {
                         String res = slangs.addSlang(slang, def);
-                        System.out.println(res);
-
                         if (res != null) {
                             System.out.println("Thêm thành công!");
                         } else {
@@ -110,7 +109,6 @@ public class Manager {
                 }
             } else {
                 String res = slangs.addSlang(slang, def);
-                System.out.println(res);
                 if (res != null) {
                     System.out.println("Thêm không thành công!");
                 } else {
@@ -122,4 +120,93 @@ public class Manager {
             e.printStackTrace();
         }
     }
+
+    public void editSlang() {
+        BufferedReader br = null;
+        InputStreamReader isr = null;
+        String slang;
+        try {
+            isr = new InputStreamReader(System.in, "UTF-8");
+            br = new BufferedReader(isr);
+            System.out.print("Nhập slang bạn muốn chỉnh sửa: ");
+            slang = br.readLine();
+            if (slangs.searchByKey(slang) != null) {
+                System.out.print("Nhập định nghĩa mới: ");
+                String newDef = br.readLine();
+                if (slangs.addSlang(slang, newDef) != null) {
+                    System.out.println("Chỉnh sửa slang thành công!");
+                } else {
+                    System.out.println("Chỉnh sửa slang không thành công!");
+                }
+            } else {
+                System.out.println("Slang không tồn tại!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void deleteSlang() {
+        BufferedReader br = null;
+        InputStreamReader isr = null;
+        String slang;
+        try {
+            isr = new InputStreamReader(System.in, "UTF-8");
+            br = new BufferedReader(isr);
+            System.out.print("Nhập slang bạn muốn xóa: ");
+            slang = br.readLine();
+            if (slangs.searchByKey(slang) != null) {
+                System.out.println("Bạn có chắc chắn muốn thực hiện xóa không? (1):Có / (0):Không");
+                System.out.print("Nhập lựa chọn: ");
+                int choice = Integer.parseInt(br.readLine());
+                if (choice == 1) {
+                    if (slangs.removeSlangByKey(slang) != null) {
+                        System.out.println("Xóa thành công!");
+                    } else {
+                        System.out.println("Xóa không thành công!");
+                    }
+                } else if (choice == 0) {
+                    System.out.println("Đang hủy.....");
+                }
+            } else {
+                System.out.println("Slang không tồn tại!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetSlangs() {
+        BufferedReader br = null;
+        InputStreamReader isr = null;
+        try {
+            isr = new InputStreamReader(System.in, "UTF-8");
+            br = new BufferedReader(isr);
+            System.out.println("Bạn có chắc chắn muốn reset danh sách slangs không? (1):Có / (0):Không");
+            System.out.print("Nhập lựa chọn: ");
+            int choice = Integer.parseInt(br.readLine());
+            if(choice == 1) {
+                slangs.reset("src/data/slang-backup.txt");
+                System.out.println("Reset thành công!");
+            } else if (choice == 0){
+                System.out.println("Đang hủy.....");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getRandomSlang(){
+        String[] slang = slangs.getRandom();
+        System.out.println("Slang word random: " + slang[0]);
+        System.out.println("Definition: " + slang[1]);
+    }
+
+
+
+
+
+
 }
