@@ -60,7 +60,7 @@ public class Slang {
         }
     }
 
-    public void printOut(String path){
+    public void saveSlangs(String path){
         FileOutputStream fos = null;
         OutputStreamWriter osw = null;
         BufferedWriter bw = null;
@@ -68,6 +68,7 @@ public class Slang {
             fos = new FileOutputStream(path);
             osw = new OutputStreamWriter(fos);
             bw = new BufferedWriter(osw);
+            bw.write("Slang`Meaning\n");
             for (String key : slangs.keySet()) {
                 String value = slangs.get(key);
                 bw.write(key + "`" + value + "\n");

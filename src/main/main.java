@@ -12,13 +12,14 @@ public class main {
     public static void main(String[] args) {
         int choice;
         Slang slangs = new Slang("src/data/slang.txt");
-        Manager manager = new Manager(slangs);
+        Manager manager = new Manager(slangs, "src/data/searchHistory.txt");
         BufferedReader br = null;
         InputStreamReader isr = null;
         try {
             isr = new InputStreamReader(System.in, "utf-8");
             br = new BufferedReader(isr);
             do {
+                clearScreen();
                 System.out.println("=========================================");
                 System.out.println("1. Tìm kiếm theo slang word");
                 System.out.println("2. Tìm kiếm theo definition");
@@ -45,7 +46,8 @@ public class main {
                 }
                 if(choice == 0){
                     System.out.println("Thoát chương trình.....");
-                    slangs.printOut("src/data/slang.txt");
+                    slangs.saveSlangs("src/data/slang.txt");
+                    manager.saveSearchHistory("src/data/searchHistory.txt");
                     break;
                 }
                 int next = -1;
@@ -97,10 +99,7 @@ public class main {
                             System.out.print("Giá trị nhập không hợp lệ! Vui lòng chọn lại: ");
                         }
                     }
-
-
                 } while (next == 1);
-
             } while (true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,7 +112,16 @@ public class main {
                 ioException.printStackTrace();
             }
         }
-
-
+    }
+    public static void clearScreen() {
+//        System.out.print("\033[H\033[2J");
+//        System.out.flush();
+        //Clears Screen in java
+        try {
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {}
     }
 }

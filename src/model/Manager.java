@@ -1,8 +1,6 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,6 +21,23 @@ public class Manager {
         searchHistory = new ArrayList<>();
     }
 
+    public Manager(Slang slangs, String searchHistorypath) {
+        super();
+        this.slangs = slangs;
+        searchHistory = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(searchHistorypath)));
+            String line;
+            while((line = br.readLine()) != null){
+                searchHistory.add(line);
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private static boolean checkAnsInput(String str) {
         if (str.length() > 1)
             return false;
@@ -30,8 +45,25 @@ public class Manager {
         return c >= 65 && c <= 68;
     }
 
+    public void saveSearchHistory(String path) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path)));
+            searchHistory.forEach(data -> {
+                try {
+                    bw.write(data + "\n");
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            });
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void searchBySlang() {
-        System.out.print("Nhập slang cầm tìm:");
+        System.out.print("Nhập slang cầm tìm: ");
         BufferedReader br = null;
         InputStreamReader isr = null;
         try {
@@ -44,17 +76,12 @@ public class Manager {
             } else {
                 System.out.println("Không tìm thấy!");
             }
+            if (searchHistory.contains(str)) {
+                searchHistory.remove(str);
+            }
             searchHistory.add(str);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-//            try {
-//                br.close();
-//                isr.close();
-//            } catch (IOException ioException) {
-//                ioException.printStackTrace();
-//            }
-
         }
     }
 
@@ -98,9 +125,10 @@ public class Manager {
                 System.out.print("Nhập lựa chọn: ");
                 int choice = Integer.parseInt(br.readLine());
                 if (choice == 0) {
+                    System.out.println("Đang hủy.....");
                     return;
                 } else if (choice == 1) {
-                    System.out.println("Bạn muốn thực hiện override slang đã tồn tại(1) hay duplicate slang mới(2)?");
+                    System.out.println("Bạn muốn thực hiện ghi đè slang đã tồn tại(1) hay thêm nghĩa cho slang(2)?");
                     System.out.print("Nhập lựa chọn: ");
                     choice = Integer.parseInt(br.readLine());
                     if (choice == 1) {
@@ -112,7 +140,12 @@ public class Manager {
                         }
                         return;
                     } else if (choice == 2) {
-                        System.out.println("Chức năng chưa được hỗ trợ");
+                        String res = slangs.addSlang(slang, slangs.searchByKey(slang) + " | " + def);
+                        if (res != null) {
+                            System.out.println("Thêm thành công!");
+                        } else {
+                            System.out.println("Thêm không thành công!");
+                        }
                         return;
                     }
                 }
@@ -245,11 +278,11 @@ public class Manager {
         if ((chosen - 65) == correctAns) {
             System.out.println("Đáp án đúng!");
         } else {
-            System.out.println("Đáp án sai! Đáp án đúng là " + (char)(correctAns+65) + ". " + questionData.get(correctAns)[1]);
+            System.out.println("Đáp án sai! Đáp án đúng là " + (char) (correctAns + 65) + ". " + questionData.get(correctAns)[1]);
         }
     }
 
-    public void genDefQuestionn(){
+    public void genDefQuestionn() {
         ArrayList<String[]> questionData = new ArrayList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         for (int i = 0; i < 4; i++) {
@@ -281,7 +314,7 @@ public class Manager {
         if ((chosen - 65) == correctAns) {
             System.out.println("Đáp án đúng!");
         } else {
-            System.out.println("Đáp án sai! Đáp án đúng là " + (char)(correctAns+65) + ". " + questionData.get(correctAns)[0]);
+            System.out.println("Đáp án sai! Đáp án đúng là " + (char) (correctAns + 65) + ". " + questionData.get(correctAns)[0]);
         }
     }
 

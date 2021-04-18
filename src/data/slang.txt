@@ -1,4 +1,4 @@
-BBC`British Broadcasting Corporation
+Slang`Meaning
 BBB`Bugging Beyond Belief
 BBE`Babe
 GLOTR`Good Luck On The Rebuild
@@ -1675,7 +1675,7 @@ KM`Keep Mum
 USA`United States of America
 KO`Knock Out| OK
 USC`University of Southern California
-KP`Korean Pride
+KP`kphan | knw
 USB`Universal Serial Bus
 KR`Kind Regards
 USD`United States Dollar
